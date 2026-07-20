@@ -43,8 +43,9 @@
             </div>
         </div>
 
-        <div class="mt-20" style="display:flex; gap:12px;">
+        <div class="mt-20" style="display:flex; gap:12px; flex-wrap:wrap;">
             <a th:href="@{/register}" class="btn btn-gold">+ REGISTER NEW PLAYER</a>
+            <span class="muted small" style="align-self:center;">Logged in as <strong th:text="${userRoll}"></strong></span>
         </div>
         <p class="muted small mt-20" style="margin-bottom:0;">
             Register new members directly and manage attendance using the local Kirito database.
