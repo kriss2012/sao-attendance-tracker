@@ -14,8 +14,8 @@ import java.time.LocalDate;
 /**
  * Populates the in-memory H2 database with a handful of students on
  * startup so the dashboard is populated immediately, without requiring
- * a live Google Sheets connection. Safe to delete once you are syncing
- * real data - it only inserts if the students table is empty.
+ * any external integration. Safe to delete once you are using a real
+ * production datasource - it only inserts if the students table is empty.
  */
 @Configuration
 public class DemoDataSeeder {
