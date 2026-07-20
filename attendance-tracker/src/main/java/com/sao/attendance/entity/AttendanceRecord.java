@@ -66,12 +66,4 @@ public class AttendanceRecord extends AbstractAuditable {
     public void setStatus(AttendanceStatus status) {
         this.status = status;
     }
-
-    public boolean isSyncedFromSheet() {
-        return syncedFromSheet;
-    }
-
-    public void setSyncedFromSheet(boolean syncedFromSheet) {
-        this.syncedFromSheet = syncedFromSheet;
-    }
 }
