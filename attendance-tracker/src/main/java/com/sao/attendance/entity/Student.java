@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * A student (a "player", in the theme of the front end) tracked by the
- * system. {@code rollNumber} is the natural key used to match rows coming
- * back from the connected Google Sheet to a local record.
+ * system. {@code rollNumber} is the natural key used to identify each
+ * player and their attendance history.
  */
 @Entity
 @Table(name = "students", uniqueConstraints = @UniqueConstraint(columnNames = "roll_number"))
