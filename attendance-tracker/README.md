@@ -11,7 +11,7 @@ System" dashboard, backed by direct CRUD storage in H2 or MySQL.
 | JPA entities & mappings (`@OneToMany` / `@ManyToOne`) | `entity/Student.java`, `entity/AttendanceRecord.java` |
 | Repositories | `repository/` |
 | Service interfaces + impls (business rules, "is attendance marked?") | `service/`, `service/impl/` |
-| Google Sheets integration | removed/disabled; app now uses local MySQL/H2 CRUD |
+| Google Sheets integration | removed from the codebase; app now uses direct student/attendance CRUD |
 | Custom exceptions | `exception/` |
 | REST API + its own exception handler | `controller/api/` |
 | Thymeleaf web dashboard + its own exception handler | `controller/web/` |
@@ -28,20 +28,19 @@ mvn spring-boot:run
 
 Then open **http://localhost:8080** — you'll land on the "Link Start" splash
 page. Click through to the dashboard; it's pre-populated with demo students
-and attendance so you can see everything working immediately, with no
-external services required.
+and attendance so you can see everything working immediately.
 
-The H2 console is available at `/h2-console` (JDBC URL:
-`jdbc:h2:mem:attendancedb`, user `sa`, empty password) if you want to
-inspect the data directly.
+By default the app now connects to MySQL using the `Kirito` database.
+If you prefer a zero-setup in-memory database instead, comment the MySQL
+block in `src/main/resources/application.properties` and uncomment the H2
+block.
 
-## Switching to MySQL
+## Switching databases
 
-The project matches the datasource shape from a typical MySQL + JPA setup.
-To use MySQL instead of the built-in H2 database, open
-`src/main/resources/application.properties` and follow the commented block:
-comment out the H2 lines, uncomment the MySQL lines, and fill in your own
-URL/username/password.
+The project is configured to use MySQL by default with the `Kirito`
+database. If you'd rather run with H2 for local testing, open
+`src/main/resources/application.properties`, comment the MySQL block,
+and uncomment the H2 block.
 
 ## Direct CRUD usage
 
