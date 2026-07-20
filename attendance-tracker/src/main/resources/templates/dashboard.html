@@ -44,13 +44,10 @@
         </div>
 
         <div class="mt-20" style="display:flex; gap:12px;">
-            <form th:action="@{/dashboard/sync}" method="post">
-                <button type="submit" class="btn btn-gold">⇪ SYNC FROM SHEET</button>
-            </form>
+            <a th:href="@{/register}" class="btn btn-gold">+ REGISTER NEW PLAYER</a>
         </div>
         <p class="muted small mt-20" style="margin-bottom:0;">
-            Sync pulls the latest rows from your connected Google Sheet. If no credentials are
-            configured yet, this will show a clear connection error instead of crashing the app.
+            Register new members directly and manage attendance without any external sheet integration.
         </p>
     </div>
 
