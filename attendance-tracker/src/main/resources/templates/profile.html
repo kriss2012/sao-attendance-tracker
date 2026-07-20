@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('My Profile')}"></head>
+<body>
+<div class="shell">
+
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div class="window">
+        <div class="window-title">PLAYER PROFILE</div>
+        <h2 th:text="${student.name}"></h2>
+        <p class="mono muted">
+            ROLL <span th:text="${student.rollNumber}"></span> ·
+            GUILD <span th:text="${student.guild}"></span>
+        </p>
+        <div class="profile-actions" style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+            <a th:href="@{'/students/' + ${student.rollNumber} + '/edit'}" class="btn btn-ghost">EDIT PROFILE</a>
+            <a th:href="@{/dashboard}" class="btn btn-ghost">VIEW DASHBOARD</a>
+            <a th:href="@{/logout}" class="btn btn-sm btn-ghost">LOGOUT</a>
+        </div>
+    </div>
+
+    <div class="window mt-20">
+        <div class="window-title">TODAY'S STATUS</div>
+        <div>
+            <span class="badge" th:classappend="${#strings.toLowerCase(studentStatus)}" th:text="${studentStatus}"></span>
+        </div>
+    </div>
+
+    <div class="window mt-20">
+        <div class="window-title">QUICK STATS</div>
+        <p class="muted small">Use the dashboard to see full attendance distribution and player roster stats.</p>
+    </div>
+
+    <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER</footer>
+</div>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
