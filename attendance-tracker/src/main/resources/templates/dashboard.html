@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Dashboard')}"></head>
+<body>
+<div class="shell">
+
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
+
+    <div class="window">
+        <div class="window-title">SYSTEM STATUS // <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span></div>
+
+        <div class="gauge-wrap">
+            <div class="gauge">
+                <svg viewBox="0 0 220 220">
+                    <circle class="track" cx="110" cy="110" r="100"/>
+                    <circle class="track" cx="110" cy="110" r="80"/>
+                    <circle class="track" cx="110" cy="110" r="60"/>
+                    <circle class="track" cx="110" cy="110" r="40"/>
+
+                    <circle class="arc" cx="110" cy="110" r="100" stroke="var(--hp-green)"
+                            th:attr="data-fraction=${summary.totalStudents > 0 ? summary.presentCount * 1.0 / summary.totalStudents : 0}"/>
+                    <circle class="arc" cx="110" cy="110" r="80" stroke="var(--gold)"
+                            th:attr="data-fraction=${summary.totalStudents > 0 ? summary.lateCount * 1.0 / summary.totalStudents : 0}"/>
+                    <circle class="arc" cx="110" cy="110" r="60" stroke="var(--crimson)"
+                            th:attr="data-fraction=${summary.totalStudents > 0 ? summary.absentCount * 1.0 / summary.totalStudents : 0}"/>
+                    <circle class="arc" cx="110" cy="110" r="40" stroke="var(--slate)"
+                            th:attr="data-fraction=${summary.totalStudents > 0 ? summary.notMarkedCount * 1.0 / summary.totalStudents : 0}"/>
+                </svg>
+                <div class="gauge-readout">
+                    <div class="rate" th:text="${#numbers.formatDecimal(summary.attendanceRate, 1, 1)} + '%'">0%</div>
+                    <div class="label">ATTENDANCE RATE</div>
+                </div>
+            </div>
+
+            <div class="gauge-legend">
+                <div class="row"><span class="swatch" style="background:var(--hp-green)"></span> PRESENT <span class="count" th:text="${summary.presentCount}"></span></div>
+                <div class="row"><span class="swatch" style="background:var(--gold)"></span> LATE <span class="count" th:text="${summary.lateCount}"></span></div>
+                <div class="row"><span class="swatch" style="background:var(--crimson)"></span> ABSENT <span class="count" th:text="${summary.absentCount}"></span></div>
+                <div class="row"><span class="swatch" style="background:var(--slate)"></span> NOT LOGGED <span class="count" th:text="${summary.notMarkedCount}"></span></div>
+                <div class="row muted small" style="margin-top:6px;">TOTAL PLAYERS <span class="count" th:text="${summary.totalStudents}"></span></div>
+            </div>
+        </div>
+
+        <div class="mt-20" style="display:flex; gap:12px;">
+            <form th:action="@{/dashboard/sync}" method="post">
+                <button type="submit" class="btn btn-gold">⇪ SYNC FROM SHEET</button>
+            </form>
+        </div>
+        <p class="muted small mt-20" style="margin-bottom:0;">
+            Sync pulls the latest rows from your connected Google Sheet. If no credentials are
+            configured yet, this will show a clear connection error instead of crashing the app.
+        </p>
+    </div>
+
+    <div class="window mt-20">
+        <div class="window-title">PLAYER ROSTER</div>
+        <table class="roster">
+            <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Name</th>
+                <th>Today's Status</th>
+                <th>Mark Attendance</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${statuses}">
+                <td class="roll" th:text="${s.rollNumber}"></td>
+                <td th:text="${s.studentName}"></td>
+                <td>
+                    <span class="badge" th:classappend="${#strings.toLowerCase(s.status)}"
+                          th:text="${s.marked} ? ${s.status} : 'NOT LOGGED'"></span>
+                </td>
+                <td>
+                    <form th:if="${!s.marked}" th:action="@{/dashboard/mark}" method="post">
+                        <input type="hidden" name="rollNumber" th:value="${s.rollNumber}"/>
+                        <button type="submit" name="status" value="PRESENT" class="btn btn-sm">Present</button>
+                        <button type="submit" name="status" value="LATE" class="btn btn-sm btn-gold">Late</button>
+                        <button type="submit" name="status" value="ABSENT" class="btn btn-sm btn-ghost">Absent</button>
+                    </form>
+                    <span th:if="${s.marked}" class="muted small">Logged for today</span>
+                </td>
+                <td><a th:href="@{'/students/' + ${s.rollNumber}}" class="btn btn-ghost btn-sm">PROFILE</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER · BUILT WITH SPRING BOOT</footer>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
