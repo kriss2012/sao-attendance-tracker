@@ -29,7 +29,24 @@
 
     <div class="window mt-20">
         <div class="window-title">QUICK STATS</div>
-        <p class="muted small">Use the dashboard to see full attendance distribution and player roster stats.</p>
+        <div class="quick-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;">
+            <div class="stat-card">
+                <div class="stat-label">TOTAL PLAYERS</div>
+                <div class="stat-value" th:text="${summary.totalStudents}"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">TODAY PRESENT</div>
+                <div class="stat-value" th:text="${summary.presentCount}"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">TODAY ABSENT</div>
+                <div class="stat-value" th:text="${summary.absentCount}"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">NOT LOGGED</div>
+                <div class="stat-value" th:text="${summary.notMarkedCount}"></div>
+            </div>
+        </div>
     </div>
 
     <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER</footer>
