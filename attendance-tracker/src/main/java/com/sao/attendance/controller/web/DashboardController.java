@@ -125,8 +125,8 @@ public class DashboardController {
                                  HttpSession session,
                                  RedirectAttributes redirectAttributes,
                                  Model model) {
-        if (session.getAttribute("userRoll") == null) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+        if (!isAuthorized(session, rollNumber)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in with your own roll number.");
             return "redirect:/";
         }
 
@@ -166,6 +166,11 @@ public class DashboardController {
         return "redirect:/";
     }
 
+    private boolean isAuthorized(HttpSession session, String rollNumber) {
+        String loggedIn = (String) session.getAttribute("userRoll");
+        return loggedIn != null && loggedIn.equals(rollNumber);
+    }
+
     @PostMapping("/dashboard/mark")
     public String markFromDashboard(@RequestParam String rollNumber,
                                     @RequestParam AttendanceStatus status,
@@ -180,8 +185,8 @@ public class DashboardController {
                               HttpSession session,
                               RedirectAttributes redirectAttributes,
                               Model model) {
-        if (session.getAttribute("userRoll") == null) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+        if (!isAuthorized(session, rollNumber)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in with your own roll number.");
             return "redirect:/";
         }
         Student student = attendanceService.getStudentByRollNumber(rollNumber);
@@ -195,8 +200,8 @@ public class DashboardController {
                                 @RequestParam(required = false, defaultValue = "") String guild,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("userRoll") == null) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+        if (!isAuthorized(session, rollNumber)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in with your own roll number.");
             return "redirect:/";
         }
         attendanceService.updateStudent(rollNumber, name.trim(), guild.trim());
@@ -208,13 +213,14 @@ public class DashboardController {
     public String deleteStudent(@PathVariable String rollNumber,
                                 HttpSession session,
                                 RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("userRoll") == null) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+        if (!isAuthorized(session, rollNumber)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in with your own roll number.");
             return "redirect:/";
         }
         attendanceService.deleteStudent(rollNumber);
+        session.invalidate();
         redirectAttributes.addFlashAttribute("successMsg", "Player " + rollNumber + " has been removed.");
-        return "redirect:/dashboard";
+        return "redirect:/";
     }
 
     @PostMapping("/students/{rollNumber}/attendance")
@@ -223,8 +229,8 @@ public class DashboardController {
                                  @RequestParam AttendanceStatus status,
                                  HttpSession session,
                                  RedirectAttributes redirectAttributes) {
-        if (session.getAttribute("userRoll") == null) {
-            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+        if (!isAuthorized(session, rollNumber)) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in with your own roll number.");
             return "redirect:/";
         }
         try {
