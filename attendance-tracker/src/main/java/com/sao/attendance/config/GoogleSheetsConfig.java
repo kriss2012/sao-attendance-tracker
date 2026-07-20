@@ -9,7 +9,6 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -31,7 +30,6 @@ import java.util.Collections;
  * that the caller of the sync endpoint sees as a clear error, rather than
  * the whole application refusing to boot.
  */
-@Configuration
 public class GoogleSheetsConfig {
 
     private final ResourceLoader resourceLoader;
