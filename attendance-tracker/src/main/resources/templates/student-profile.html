@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(${student.name})}"></head>
+<body>
+<div class="shell">
+
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div class="window">
+        <div class="window-title">PLAYER STATUS WINDOW</div>
+        <h2 th:text="${student.name}" style="font-size:1.6rem; margin-bottom:6px;"></h2>
+        <p class="mono muted">
+            ROLL <span th:text="${student.rollNumber}"></span> ·
+            GUILD <span th:text="${student.guild}"></span>
+        </p>
+    </div>
+
+    <div class="window mt-20">
+        <div class="window-title">ATTENDANCE LOG</div>
+        <table class="roster">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Source</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="record : ${history}">
+                <td class="mono" th:text="${record.attendanceDate}"></td>
+                <td><span class="badge" th:classappend="${#strings.toLowerCase(record.status)}" th:text="${record.status}"></span></td>
+                <td class="muted small" th:text="${record.syncedFromSheet} ? 'Google Sheet sync' : 'Manually logged'"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(history)}">
+                <td colspan="3" class="muted">No attendance has been logged for this player yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p class="mt-20"><a th:href="@{/dashboard}" class="btn btn-ghost btn-sm">← BACK TO DASHBOARD</a></p>
+
+    <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER</footer>
+</div>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
