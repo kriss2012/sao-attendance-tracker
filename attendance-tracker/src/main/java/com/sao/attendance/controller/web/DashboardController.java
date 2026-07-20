@@ -7,6 +7,7 @@ import com.sao.attendance.entity.Student;
 import com.sao.attendance.exception.DuplicateAttendanceException;
 import com.sao.attendance.exception.StudentNotFoundException;
 import com.sao.attendance.service.AttendanceService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +28,26 @@ public class DashboardController {
     }
 
     @GetMapping("/")
-    public String loginPage(@RequestParam(required = false) String error, Model model) {
+    public String loginPage(@RequestParam(required = false) String error,
+                            @RequestParam(required = false) String success,
+                            HttpSession session,
+                            Model model) {
+        if (session.getAttribute("userRoll") != null) {
+            return "redirect:/profile";
+        }
         if (error != null) {
             model.addAttribute("errorMsg", error);
+        }
+        if (success != null) {
+            model.addAttribute("successMsg", success);
         }
         return "index";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String rollNumber, RedirectAttributes redirectAttributes) {
+    public String login(@RequestParam String rollNumber,
+                        HttpSession session,
+                        RedirectAttributes redirectAttributes) {
         String normalized = rollNumber == null ? "" : rollNumber.trim();
         if (normalized.isBlank()) {
             redirectAttributes.addFlashAttribute("errorMsg", "Please enter your roll number.");
@@ -44,7 +56,8 @@ public class DashboardController {
 
         Optional<Student> student = attendanceService.findStudentByRollNumber(normalized);
         if (student.isPresent()) {
-            return "redirect:/students/" + normalized;
+            session.setAttribute("userRoll", normalized);
+            return "redirect:/profile";
         }
 
         redirectAttributes.addFlashAttribute("errorMsg",
@@ -62,6 +75,7 @@ public class DashboardController {
     public String register(@RequestParam String rollNumber,
                            @RequestParam String name,
                            @RequestParam(required = false, defaultValue = "") String guild,
+                           HttpSession session,
                            RedirectAttributes redirectAttributes) {
         String normalizedRoll = rollNumber == null ? "" : rollNumber.trim();
         String normalizedName = name == null ? "" : name.trim();
@@ -78,8 +92,9 @@ public class DashboardController {
         }
 
         attendanceService.createStudent(normalizedRoll, normalizedName, guild.trim());
+        session.setAttribute("userRoll", normalizedRoll);
         redirectAttributes.addFlashAttribute("successMsg", "Player registered successfully.");
-        return "redirect:/students/" + normalizedRoll;
+        return "redirect:/profile";
     }
 
     @GetMapping("/dashboard")
@@ -107,6 +122,33 @@ public class DashboardController {
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("statusOptions", AttendanceStatus.values());
         return "student-profile";
+    }
+
+    @GetMapping("/profile")
+    public String profile(HttpSession session, RedirectAttributes redirectAttributes, Model model) {
+        String rollNumber = (String) session.getAttribute("userRoll");
+        if (rollNumber == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
+
+        Student student = attendanceService.getStudentByRollNumber(rollNumber);
+        List<AttendanceRecord> history = attendanceService.getHistory(rollNumber);
+        AttendanceStatusDTO statusDto = attendanceService.getStatus(rollNumber, LocalDate.now());
+
+        model.addAttribute("student", student);
+        model.addAttribute("history", history);
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("statusOptions", AttendanceStatus.values());
+        model.addAttribute("studentStatus", statusDto.getStatus());
+        return "profile";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
+        redirectAttributes.addFlashAttribute("successMsg", "You have been logged out.");
+        return "redirect:/";
     }
 
     @PostMapping("/dashboard/mark")
