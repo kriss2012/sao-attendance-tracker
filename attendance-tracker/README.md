@@ -11,7 +11,6 @@ System" dashboard, backed by direct CRUD storage in H2 or MySQL.
 | JPA entities & mappings (`@OneToMany` / `@ManyToOne`) | `entity/Student.java`, `entity/AttendanceRecord.java` |
 | Repositories | `repository/` |
 | Service interfaces + impls (business rules, "is attendance marked?") | `service/`, `service/impl/` |
-| Google Sheets integration | removed from the codebase; app now uses direct student/attendance CRUD |
 | Custom exceptions | `exception/` |
 | REST API + its own exception handler | `controller/api/` |
 | Thymeleaf web dashboard + its own exception handler | `controller/web/` |
