@@ -20,6 +20,7 @@
     </form>
 
     <div th:if="${errorMsg}" class="flash error" th:text="${errorMsg}"></div>
+    <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
     <p class="muted small">If you're already registered, your profile and attendance history will load immediately.</p>
 </div>
 
