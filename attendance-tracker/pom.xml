@@ -19,8 +19,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <google-sheets.version>v4-rev20220927-2.0.0</google-sheets.version>
-        <google-auth.version>1.23.0</google-auth.version>
     </properties>
 
     <dependencies>
@@ -58,24 +56,6 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- Google Sheets API client -->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-sheets</artifactId>
-            <version>${google-sheets.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.google.auth</groupId>
-            <artifactId>google-auth-library-oauth2-http</artifactId>
-            <version>${google-auth.version}</version>
         </dependency>
 
         <dependency>
