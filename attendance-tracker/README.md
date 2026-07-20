@@ -11,7 +11,7 @@ System" dashboard, backed by a Google Sheets sync.
 | JPA entities & mappings (`@OneToMany` / `@ManyToOne`) | `entity/Student.java`, `entity/AttendanceRecord.java` |
 | Repositories | `repository/` |
 | Service interfaces + impls (business rules, "is attendance marked?") | `service/`, `service/impl/` |
-| Google Sheets integration | `config/GoogleSheetsConfig.java`, `service/impl/GoogleSheetServiceImpl.java` |
+| Google Sheets integration | removed/disabled; app now uses local MySQL/H2 CRUD |
 | Custom exceptions | `exception/` |
 | REST API + its own exception handler | `controller/api/` |
 | Thymeleaf web dashboard + its own exception handler | `controller/web/` |
