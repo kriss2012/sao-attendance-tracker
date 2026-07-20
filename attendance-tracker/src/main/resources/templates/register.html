@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Register Player')}"></head>
+<body>
+<div class="shell">
+
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div class="window">
+        <div class="window-title">REGISTER NEW PLAYER</div>
+        <p class="muted small">Create a new player profile in the system. Once registered, the player can log in with their roll number.</p>
+
+        <form th:action="@{/register}" method="post" class="form-grid">
+            <label>Roll Number</label>
+            <input type="text" name="rollNumber" th:value="${rollNumber}" placeholder="S001" required="required"/>
+
+            <label>Player Name</label>
+            <input type="text" name="name" placeholder="Kazuto Kirigaya" required="required"/>
+
+            <label>Guild</label>
+            <input type="text" name="guild" placeholder="Knights of the Blood"/>
+
+            <div></div>
+            <button type="submit" class="btn btn-gold">REGISTER PLAYER</button>
+        </form>
+
+        <div th:if="${errorMsg}" class="flash error" th:text="${errorMsg}"></div>
+        <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
+    </div>
+
+    <p class="mt-20"><a th:href="@{/dashboard}" class="btn btn-ghost btn-sm">← BACK TO DASHBOARD</a></p>
+
+    <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER</footer>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
