@@ -9,7 +9,7 @@
     <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
 
     <div class="window">
-        <div class="window-title">SYSTEM STATUS // <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span></div>
+        <div class="window-title">WELCOME BACK, <span th:text="${userName}"></span> // <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span></div>
 
         <div class="gauge-wrap">
             <div class="gauge">
