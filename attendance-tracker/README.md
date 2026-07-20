@@ -1,7 +1,7 @@
 # SAO Attendance Tracker
 
 A Spring Boot attendance system with a Sword Art Online-inspired "Cardinal
-System" dashboard, backed by a Google Sheets sync.
+System" dashboard, backed by direct CRUD storage in H2 or MySQL.
 
 ## What's inside
 
@@ -43,56 +43,12 @@ To use MySQL instead of the built-in H2 database, open
 comment out the H2 lines, uncomment the MySQL lines, and fill in your own
 URL/username/password.
 
-## Connecting your Google Sheet
+## Direct CRUD usage
 
-The integration code is fully wired up and ready to run — it just needs
-your own Google credentials, since I have no way to authenticate to your
-sheet on your behalf.
-
-**1. Enable the API and create a service account**
-- In Google Cloud Console, create (or pick) a project and enable the
-  **Google Sheets API**.
-- Under *IAM & Admin → Service Accounts*, create a service account and
-  generate a **JSON key**. This downloads a `.json` file — that's your
-  credentials.
-
-**2. Share the sheet with the service account**
-- Open the JSON key file and copy the `client_email` value
-  (looks like `something@your-project.iam.gserviceaccount.com`).
-- Open your Google Sheet → **Share** → paste that email in as a Viewer.
-  Without this step the API will return a 403 and the app will surface it
-  as a clear `GoogleSheetSyncException`.
-
-**3. Drop the key into the project**
-- Rename the downloaded file to `google-credentials.json`.
-- Place it at `src/main/resources/credentials/google-credentials.json`
-  (a placeholder file with these same instructions already lives in that
-  folder).
-
-**4. Point the app at your sheet**
-- In `application.properties`, `googlesheets.spreadsheet-id` is already
-  set to the ID from the sheet URL you shared:
-  `1M78OGUbCN2GROD6gkW3BLGeqoPKz92ANrgEtqKZyuXg`
-- `googlesheets.range` defaults to `Sheet1!A:E` — update the tab name if
-  yours differs.
-
-**5. Expected sheet layout** (row 1 is treated as a header and skipped):
-
-| RollNumber | Name | Guild | Date | Status |
-|---|---|---|---|---|
-| S001 | Kirito | Knights of Blood | 2026-07-20 | PRESENT |
-
-`Status` must be one of `PRESENT`, `ABSENT`, or `LATE`.
-
-**6. Sync**
-- Click **"⇪ Sync from Sheet"** on the dashboard, or `POST /api/sheets/sync`.
-- Rows are upserted: existing students/dates are updated, new ones are
-  created. A malformed row is skipped and logged rather than failing the
-  whole sync.
-
-Until you complete these steps, the app runs completely normally on the
-seeded demo data — a sync attempt will just fail gracefully with a
-readable error message instead of crashing anything.
+The application now stores students and attendance directly in a local
+JPA-backed database. You can run it immediately with the built-in H2
+in-memory database or switch to MySQL by following the instructions in
+`src/main/resources/application.properties`.
 
 ## REST API
 
@@ -105,7 +61,6 @@ readable error message instead of crashing anything.
 | POST | `/api/attendance/mark` | Mark attendance (409 if already marked) |
 | PUT | `/api/attendance/update` | Update an existing mark |
 | GET | `/api/attendance/summary?date=yyyy-MM-dd` | Dashboard counts |
-| POST | `/api/sheets/sync` | Trigger a Google Sheets sync |
 
 All errors come back as a consistent JSON body:
 ```json
