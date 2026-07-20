@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('Edit Player')}"></head>
+<body>
+<div class="shell">
+
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div class="window">
+        <div class="window-title">EDIT PLAYER PROFILE</div>
+        <p class="muted small">Update the player's display name or guild. The roll number remains fixed once created.</p>
+
+        <form th:action="@{'/students/' + ${student.rollNumber} + '/edit'}" method="post" class="form-grid">
+            <label>Roll Number</label>
+            <input type="text" name="rollNumber" th:value="${student.rollNumber}" readonly="readonly"/>
+
+            <label>Player Name</label>
+            <input type="text" name="name" th:value="${student.name}" required="required"/>
+
+            <label>Guild</label>
+            <input type="text" name="guild" th:value="${student.guild}"/>
+
+            <div></div>
+            <button type="submit" class="btn btn-gold">SAVE CHANGES</button>
+        </form>
+
+        <div th:if="${errorMsg}" class="flash error" th:text="${errorMsg}"></div>
+        <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
+    </div>
+
+    <p class="mt-20"><a th:href="@{'/students/' + ${student.rollNumber}}" class="btn btn-ghost btn-sm">← BACK TO PROFILE</a></p>
+
+    <footer class="foot">CARDINAL SYSTEM · SAO ATTENDANCE TRACKER</footer>
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
