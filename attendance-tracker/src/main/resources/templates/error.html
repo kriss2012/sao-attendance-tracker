@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head('System Error')}"></head>
+<body>
+<div class="shell">
+    <div th:replace="~{fragments/common :: topbar}"></div>
+
+    <div class="window error-window">
+        <div class="window-title" th:text="${errorTitle} ?: 'SYSTEM ERROR'"></div>
+        <p class="code">// EXCEPTION CAUGHT — NO DIVE INTERRUPTED</p>
+        <p class="msg" th:text="${errorMessage} ?: 'An unexpected error occurred.'"></p>
+        <a th:href="@{/dashboard}" class="btn btn-gold">RETURN TO DASHBOARD</a>
+    </div>
+</div>
+</body>
+</html>
