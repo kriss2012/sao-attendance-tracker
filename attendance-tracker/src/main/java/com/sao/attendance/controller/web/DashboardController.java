@@ -98,7 +98,14 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(HttpSession session,
+                            RedirectAttributes redirectAttributes,
+                            Model model) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
+
         LocalDate today = LocalDate.now();
         List<Student> students = attendanceService.getAllStudents();
 
@@ -114,7 +121,15 @@ public class DashboardController {
     }
 
     @GetMapping("/students/{rollNumber}")
-    public String studentProfile(@PathVariable String rollNumber, Model model) {
+    public String studentProfile(@PathVariable String rollNumber,
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes,
+                                 Model model) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
+
         Student student = attendanceService.getStudentByRollNumber(rollNumber);
         List<AttendanceRecord> history = attendanceService.getHistory(rollNumber);
         model.addAttribute("student", student);
@@ -161,7 +176,14 @@ public class DashboardController {
     }
 
     @GetMapping("/students/{rollNumber}/edit")
-    public String editStudent(@PathVariable String rollNumber, Model model) {
+    public String editStudent(@PathVariable String rollNumber,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes,
+                              Model model) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
         Student student = attendanceService.getStudentByRollNumber(rollNumber);
         model.addAttribute("student", student);
         return "student-edit";
@@ -171,14 +193,25 @@ public class DashboardController {
     public String updateStudent(@PathVariable String rollNumber,
                                 @RequestParam String name,
                                 @RequestParam(required = false, defaultValue = "") String guild,
+                                HttpSession session,
                                 RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
         attendanceService.updateStudent(rollNumber, name.trim(), guild.trim());
         redirectAttributes.addFlashAttribute("successMsg", "Profile updated for " + rollNumber + ".");
         return "redirect:/students/" + rollNumber;
     }
 
     @PostMapping("/students/{rollNumber}/delete")
-    public String deleteStudent(@PathVariable String rollNumber, RedirectAttributes redirectAttributes) {
+    public String deleteStudent(@PathVariable String rollNumber,
+                                HttpSession session,
+                                RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
         attendanceService.deleteStudent(rollNumber);
         redirectAttributes.addFlashAttribute("successMsg", "Player " + rollNumber + " has been removed.");
         return "redirect:/dashboard";
@@ -188,7 +221,12 @@ public class DashboardController {
     public String saveAttendance(@PathVariable String rollNumber,
                                  @RequestParam String attendanceDate,
                                  @RequestParam AttendanceStatus status,
+                                 HttpSession session,
                                  RedirectAttributes redirectAttributes) {
+        if (session.getAttribute("userRoll") == null) {
+            redirectAttributes.addFlashAttribute("errorMsg", "Please log in first.");
+            return "redirect:/";
+        }
         try {
             LocalDate date = LocalDate.parse(attendanceDate);
             attendanceService.saveAttendance(rollNumber, date, status);
