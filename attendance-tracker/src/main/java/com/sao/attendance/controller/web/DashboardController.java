@@ -1,6 +1,7 @@
 package com.sao.attendance.controller.web;
 
 import com.sao.attendance.dto.AttendanceStatusDTO;
+import com.sao.attendance.dto.DashboardSummaryDTO;
 import com.sao.attendance.entity.AttendanceRecord;
 import com.sao.attendance.entity.AttendanceStatus;
 import com.sao.attendance.entity.Student;
@@ -107,16 +108,22 @@ public class DashboardController {
         }
 
         LocalDate today = LocalDate.now();
+        String loggedInRoll = (String) session.getAttribute("userRoll");
         List<Student> students = attendanceService.getAllStudents();
 
         List<AttendanceStatusDTO> statuses = students.stream()
                 .map(s -> attendanceService.getStatus(s.getRollNumber(), today))
                 .toList();
 
+        DashboardSummaryDTO summary = attendanceService.getDashboardSummary(today);
+        Student currentUser = attendanceService.getStudentByRollNumber(loggedInRoll);
+
         model.addAttribute("today", today);
-        model.addAttribute("summary", attendanceService.getDashboardSummary(today));
+        model.addAttribute("summary", summary);
         model.addAttribute("statuses", statuses);
         model.addAttribute("statusOptions", AttendanceStatus.values());
+        model.addAttribute("userName", currentUser.getName());
+        model.addAttribute("userRoll", loggedInRoll);
         return "dashboard";
     }
 
@@ -151,11 +158,14 @@ public class DashboardController {
         List<AttendanceRecord> history = attendanceService.getHistory(rollNumber);
         AttendanceStatusDTO statusDto = attendanceService.getStatus(rollNumber, LocalDate.now());
 
+        DashboardSummaryDTO summary = attendanceService.getDashboardSummary(LocalDate.now());
+
         model.addAttribute("student", student);
         model.addAttribute("history", history);
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("statusOptions", AttendanceStatus.values());
         model.addAttribute("studentStatus", statusDto.getStatus());
+        model.addAttribute("summary", summary);
         return "profile";
     }
 
