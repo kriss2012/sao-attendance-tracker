@@ -34,6 +34,10 @@ public class AttendanceRecord extends AbstractAuditable {
     @Column(nullable = false, length = 20)
     private AttendanceStatus status;
 
+    /** True when this row was written by a Google Sheets sync rather than the dashboard UI. */
+    @Column(name = "synced_from_sheet", nullable = false)
+    private boolean syncedFromSheet = false;
+
     public AttendanceRecord() {
     }
 
@@ -65,5 +69,13 @@ public class AttendanceRecord extends AbstractAuditable {
 
     public void setStatus(AttendanceStatus status) {
         this.status = status;
+    }
+
+    public boolean isSyncedFromSheet() {
+        return syncedFromSheet;
+    }
+
+    public void setSyncedFromSheet(boolean syncedFromSheet) {
+        this.syncedFromSheet = syncedFromSheet;
     }
 }
