@@ -22,41 +22,20 @@
             <tr>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Source</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="record : ${history}">
                 <td class="mono" th:text="${record.attendanceDate}"></td>
                 <td><span class="badge" th:classappend="${#strings.toLowerCase(record.status)}" th:text="${record.status}"></span></td>
+                <td class="muted small" th:text="${record.syncedFromSheet} ? 'Google Sheet sync' : 'Manually logged'"></td>
             </tr>
             <tr th:if="${#lists.isEmpty(history)}">
-                <td colspan="2" class="muted">No attendance has been logged for this player yet.</td>
+                <td colspan="3" class="muted">No attendance has been logged for this player yet.</td>
             </tr>
             </tbody>
         </table>
-    </div>
-
-    <div class="window mt-20">
-        <div class="window-title">LOG ATTENDANCE</div>
-        <form th:action="@{'/students/' + ${student.rollNumber} + '/attendance'}" method="post" class="form-grid">
-            <label>Date</label>
-            <input type="date" name="attendanceDate" th:value="${today}" required="required"/>
-
-            <label>Status</label>
-            <select name="status" required="required">
-                <option th:each="status : ${statusOptions}" th:value="${status}" th:text="${status}"></option>
-            </select>
-
-            <div></div>
-            <button type="submit" class="btn btn-gold">SAVE ATTENDANCE</button>
-        </form>
-    </div>
-
-    <div class="window mt-20" style="display:flex; gap:12px; flex-wrap:wrap;">
-        <a th:href="@{'/students/' + ${student.rollNumber} + '/edit'}" class="btn btn-ghost">EDIT PROFILE</a>
-        <form th:action="@{'/students/' + ${student.rollNumber} + '/delete'}" method="post" th:onsubmit="return confirm('Delete this player and all attendance records?');">
-            <button type="submit" class="btn btn-sm btn-ghost">DELETE PROFILE</button>
-        </form>
     </div>
 
     <p class="mt-20"><a th:href="@{/dashboard}" class="btn btn-ghost btn-sm">← BACK TO DASHBOARD</a></p>
