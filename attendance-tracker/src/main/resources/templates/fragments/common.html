@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(title)">
+<head>
+<th:block th:fragment="head(title)">
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="SAO Attendance Tracker lets members log in, view stats, and manage attendance directly from a Spring Boot web app."/>
-    <meta name="keywords" content="attendance, spring boot, student tracker, login, profile, SQL, dashboard"/>
-    <meta name="robots" content="index, follow"/>
     <title th:text="${title} + ' — SAO Attendance Tracker'">SAO Attendance Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/sao-theme.css}"/>
+</th:block>
 </head>
 <body>
 <div th:fragment="topbar" class="topbar">
@@ -21,8 +20,6 @@
         </div>
         <div data-system-clock class="mono">00:00:00</div>
         <a th:href="@{/dashboard}" class="btn btn-ghost btn-sm">DASHBOARD</a>
-        <a th:href="@{/profile}" class="btn btn-ghost btn-sm">PROFILE</a>
-        <a th:href="@{/logout}" class="btn btn-sm btn-ghost">LOGOUT</a>
     </div>
 </div>
 </body>
