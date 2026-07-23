@@ -36,39 +36,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Optional<Student> findStudentByRollNumber(String rollNumber) {
-        return studentRepository.findByRollNumber(rollNumber);
-    }
-
-    @Override
     public Student getStudentByRollNumber(String rollNumber) {
         return studentRepository.findByRollNumber(rollNumber)
                 .orElseThrow(() -> StudentNotFoundException.forRollNumber(rollNumber));
-    }
-
-    @Override
-    @Transactional
-    public Student createStudent(String rollNumber, String name, String guild) {
-        if (studentRepository.existsByRollNumber(rollNumber)) {
-            throw new IllegalArgumentException("Roll number already exists: " + rollNumber);
-        }
-        return studentRepository.save(new Student(name, rollNumber, guild));
-    }
-
-    @Override
-    @Transactional
-    public Student updateStudent(String rollNumber, String name, String guild) {
-        Student student = getStudentByRollNumber(rollNumber);
-        student.setName(name);
-        student.setGuild(guild);
-        return studentRepository.save(student);
-    }
-
-    @Override
-    @Transactional
-    public void deleteStudent(String rollNumber) {
-        Student student = getStudentByRollNumber(rollNumber);
-        studentRepository.delete(student);
     }
 
     @Override
@@ -118,22 +88,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(() -> AttendanceNotFoundException.forStudentAndDate(rollNumber, date));
 
         record.setStatus(status);
-        return attendanceRecordRepository.save(record);
-    }
-
-    @Override
-    @Transactional
-    public AttendanceRecord saveAttendance(String rollNumber, LocalDate date, AttendanceStatus status) {
-        Student student = getStudentByRollNumber(rollNumber);
-
-        Optional<AttendanceRecord> existing = attendanceRecordRepository.findByStudentAndAttendanceDate(student, date);
-        if (existing.isPresent()) {
-            AttendanceRecord record = existing.get();
-            record.setStatus(status);
-            return attendanceRecordRepository.save(record);
-        }
-
-        AttendanceRecord record = new AttendanceRecord(student, date, status);
         return attendanceRecordRepository.save(record);
     }
 
