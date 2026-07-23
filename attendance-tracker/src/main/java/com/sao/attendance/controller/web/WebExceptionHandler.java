@@ -2,6 +2,7 @@ package com.sao.attendance.controller.web;
 
 import com.sao.attendance.exception.AttendanceNotFoundException;
 import com.sao.attendance.exception.DuplicateAttendanceException;
+import com.sao.attendance.exception.GoogleSheetSyncException;
 import com.sao.attendance.exception.StudentNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -32,6 +33,12 @@ public class WebExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleDuplicate(DuplicateAttendanceException ex, Model model) {
         return renderError(model, "ALREADY LOGGED", ex.getMessage());
+    }
+
+    @ExceptionHandler(GoogleSheetSyncException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public String handleSheetSync(GoogleSheetSyncException ex, Model model) {
+        return renderError(model, "CARDINAL SYSTEM LINK FAILED", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
