@@ -3,6 +3,7 @@ package com.sao.attendance.controller.api;
 import com.sao.attendance.dto.ErrorResponse;
 import com.sao.attendance.exception.AttendanceNotFoundException;
 import com.sao.attendance.exception.DuplicateAttendanceException;
+import com.sao.attendance.exception.GoogleSheetSyncException;
 import com.sao.attendance.exception.StudentNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DuplicateAttendanceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicate(DuplicateAttendanceException ex) {
         return build(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(GoogleSheetSyncException.class)
+    public ResponseEntity<ErrorResponse> handleSheetSync(GoogleSheetSyncException ex) {
+        return build(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
