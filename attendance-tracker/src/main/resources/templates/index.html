@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head('Player Login')}"></head>
+<head th:replace="~{fragments/common :: head('Link Start')}"></head>
 <body>
 
 <div class="splash">
     <div class="ring-decor"></div>
     <div class="ring-decor r2"></div>
 
-    <div class="eyebrow">CARDINAL SYSTEM // MEMBER LOGIN</div>
-    <h1>PLAYER <span>LOGIN</span></h1>
+    <div class="eyebrow">CARDINAL SYSTEM // ATTENDANCE MODULE</div>
+    <h1>LINK <span>START</span></h1>
     <p class="sub">
-        Use your roll number to access your profile and attendance history directly.
-        The app stores all data in the MySQL database named <strong>Kirito</strong>.
+        Full-dive into the roster. Track who's logged in for today's session,
+        sync live data from your connected sheet, and keep every player's
+        attendance record in one place.
     </p>
-
-    <form th:action="@{/login}" method="post" class="login-form">
-        <input type="text" name="rollNumber" placeholder="Enter roll number" required="required" autofocus="autofocus"/>
-        <button type="submit" class="link-btn">SIGN IN</button>
-    </form>
-
-    <div th:if="${errorMsg}" class="flash error" th:text="${errorMsg}"></div>
-    <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
-    <p class="muted small">If you're already registered, your profile and attendance history will load immediately.</p>
+    <a href="/dashboard" class="link-btn">LINK START</a>
+    <p class="muted small">Server status: <span class="mono">ONLINE</span></p>
 </div>
 
 <script th:src="@{/js/script.js}"></script>
