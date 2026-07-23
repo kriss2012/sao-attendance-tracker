@@ -10,6 +10,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional<Student> findByRollNumber(String rollNumber);
 
     boolean existsByRollNumber(String rollNumber);
-
-    void deleteByRollNumber(String rollNumber);
 }
