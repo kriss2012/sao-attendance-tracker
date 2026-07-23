@@ -9,7 +9,7 @@
     <div th:if="${successMsg}" class="flash" th:text="${successMsg}"></div>
 
     <div class="window">
-        <div class="window-title">WELCOME BACK, <span th:text="${userName}"></span> // <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span></div>
+        <div class="window-title">SYSTEM STATUS // <span th:text="${#temporals.format(today, 'dd MMM yyyy')}"></span></div>
 
         <div class="gauge-wrap">
             <div class="gauge">
@@ -43,12 +43,14 @@
             </div>
         </div>
 
-        <div class="mt-20" style="display:flex; gap:12px; flex-wrap:wrap;">
-            <a th:href="@{/register}" class="btn btn-gold">+ REGISTER NEW PLAYER</a>
-            <span class="muted small" style="align-self:center;">Logged in as <strong th:text="${userRoll}"></strong></span>
+        <div class="mt-20" style="display:flex; gap:12px;">
+            <form th:action="@{/dashboard/sync}" method="post">
+                <button type="submit" class="btn btn-gold">⇪ SYNC FROM SHEET</button>
+            </form>
         </div>
         <p class="muted small mt-20" style="margin-bottom:0;">
-            Register new members directly and manage attendance using the local Kirito database.
+            Sync pulls the latest rows from your connected Google Sheet. If no credentials are
+            configured yet, this will show a clear connection error instead of crashing the app.
         </p>
     </div>
 
