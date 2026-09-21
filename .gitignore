@@ -7,3 +7,17 @@ target/
 .classpath
 .project
 src/main/resources/credentials/google-credentials.json
+
+# Standards & hygiene
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+dist/
+build/
+.gradle/
+build/
