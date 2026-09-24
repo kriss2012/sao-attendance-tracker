@@ -107,10 +107,10 @@ readable error message instead of crashing anything.
 | GET | `/api/attendance/summary?date=yyyy-MM-dd` | Dashboard counts |
 | POST | `/api/sheets/sync` | Trigger a Google Sheets sync |
 
-All errors come back as a consistent JSON body:
-```json
-{ "status": 404, "message": "No student found with roll number 'S999'.", "timestamp": "..." }
-```
+All error responses adhere to a consistent structured schema:
+- `status` (integer): Standard HTTP status code (e.g., `404`).
+- `message` (string): Human-readable diagnostic description of the failure reason.
+- `timestamp` (string): ISO-8601 server timestamp when the error occurred.
 
 ## On the "anime theme"
 
